@@ -251,7 +251,7 @@ class Player(Entity):
         print(
             f"hp: {self.hp}/{self.mhp} \nmp: {self.mp}/{self.mmp} \nstamina: {self.stamina}/{self.mstamina}"
         )
-        print(f"Items: {self.inventory.stackAmounts()}")
+        print(f"Items: {self.inventory.stack_amounts()}")
         print(f"slots: {self.slots} stat points: {self.physical_stats}")
 
     # inefficient

@@ -13,6 +13,15 @@ colorama.init()
 world_seed = "3301"
 
 
+def status(game, env_list):
+    print(f"Location: {game.location.coordinates}")
+    print(
+        f"Time: {game.clock.time} Weather: {game.location.get_temperature(game.clock.time)}"
+    )
+    print(f"Seed: {game.dynamic_seed()}")
+    print(f'Place: {game.location.generate_choice(list(env_list.values()))}')
+
+
 def dynamic_seed(coordinates, time=False, seed=None):
     if not seed:
         seed = world_seed

@@ -20,12 +20,6 @@ class ItemData:
         self.magic = magic_items.archive
         self.misc = misc_items.archive
 
-
-class EnvironmentData:
-    def __init__(self):
-        self.town = town.Town
-        self.forest = forest.Forest
-
     @property
     def list_(self):
         return [place for place in self.__dict__.values()]
@@ -39,7 +33,7 @@ class CombatData:
 
 class GameData:
     items = ItemData()
-    environments = EnvironmentData()
+    environments = {'town': town.Town, 'forest': forest.Forest}
     combat = CombatData()
 
 
