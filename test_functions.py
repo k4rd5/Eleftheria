@@ -9,6 +9,7 @@ import data.actions as actions
 from environments import town, forest
 from engine.npc import Npc, Dialogue
 from environments.shops import Shop
+from data.weapons import archive as weapons
 
 
 # TEST VARIABLES
@@ -149,3 +150,40 @@ def npctest():
 def shop_demo():
     game.player.inventory.give_currency('gold', 8000)
     shop.on_entry(game.player)
+
+
+def use_item_number_of_uses_decrement_demo():
+
+    sword = weapons['SteelSword']()
+    #sword = bread
+    game.player.add_item(sword)
+
+    print(game.player.inventory.stack_amounts())
+    game.player.use_item(sword, game.player)
+    game.player.use_item(sword, game.player)
+    game.player.use_item(sword, game.player)
+    game.player.use_item(sword, game.player)
+    game.player.use_item(sword, game.player)
+
+    stack = game.player.inventory.get_stack(sword)
+    if stack:
+        print('number of uses left:', stack.number_of_uses)
+    print(game.player.inventory.stack_amounts())
+
+
+def equip_test():
+    sword = weapons['SteelSword']()
+    game.player.add_item(sword)
+    print(game.player.inventory.stack_amounts())
+    print(game.player.slots)
+    game.player.equip(sword)
+    print(game.player.inventory.stack_amounts())
+    print(game.player.slots)
+
+
+def unequip_test():
+
+    equip_test()
+    game.player.unequip(['forehand'])
+    print(game.player.inventory.stack_amounts())
+    print(game.player.slots)

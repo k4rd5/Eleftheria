@@ -61,6 +61,12 @@ class Inventory:
                 return stack.item
         return False
 
+    def get_stack(self, item):
+        for stack in self.items:
+            if item.name == stack.name:
+                return stack
+        return False
+
     def item_amounts(self, item=None) -> dict:
         results = {}
         for stack in self.items:
@@ -77,7 +83,7 @@ class Inventory:
     def add_item(self, item, amount=1):
         remainder = amount
         for stack in self.items:
-            if stack.item is item:
+            if stack.item.name == item.name:
                 if stack.isfull:
                     continue
                 else:
@@ -91,7 +97,7 @@ class Inventory:
     def remove_item(self, item, amount=1):
         remainder = amount
         for stack in self.items[::-1]:
-            if stack.item is item:
+            if stack.item.name == item.name:
                 remainder = stack.remove(remainder)
                 if remainder or stack.amount == 0:
                     self.items.remove(stack)
@@ -106,6 +112,22 @@ class Inventory:
         new = Stack(item, 0)
         self.items.append(new)
         return new.add(amount)
+
+    def use_item(self, item, victim):
+        stack = self.get_stack(item)
+        if not stack:
+            return False
+        if stack.number_of_uses > 0:
+            stack.number_of_uses -= 1
+        else:
+            return False
+        item.use(victim)
+        if stack.number_of_uses <= 0:
+            stack.amount -= 1
+            if stack.isempty:
+                self.items.remove(stack)
+            else:
+                stack.number_of_uses = item.number_of_uses
 
     # currency
 

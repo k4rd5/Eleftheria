@@ -154,10 +154,10 @@ class Player(Entity):
         self.mmp = 250
         self.combat_options = combat_options or []
         self.slots = {
-            "forehand": None,
-            "offhand": None,
-            "armor": None,
-            "shield": None,
+            'forehand': None,
+            'offhand': None,
+            'armor': None,
+            'shield': None,
         }
         self.stats = {
             "combat": Stats(name="combat"),
@@ -179,38 +179,32 @@ class Player(Entity):
         self.mastery_points = 1
 
     @ property
-    def dex(self):
+    def dexterity(self):
         return self.physical_stats["dex"]
 
     @ property
-    def int(self):
+    def intelligence(self):
         return self.physical_stats["int"]
 
     @ property
-    def vit(self):
+    def vitality(self):
         return self.physical_stats["vit"]
 
     @ property
-    def str(self):
+    def strength(self):
         return self.physical_stats["str"]
 
     def equip(self, item):
-        if "slot" not in item.__dict__.keys() or not item.slot:
+        if item.equipable_slot and self.inventory.check_item(item):
+            self.remove_item(item)
+            item.equip(self)
+        else:
             return False
-        for slot in item.slot:
-            if self.slots[slot]:
-                self.add_item(self.slots[slot])
-                self.slots[slot] = None
-            self.slots[slot] = item
-        self.remove_item(item)
-        item.equip(self)  # trigger effect from equip function
 
-    def unequip(self, item):
-        item = self.slots[item.slot[0]]
-        for slot in item.slot:
-            self.slots[slot] = None
-        self.add_item(item)
-        item.unequip(self)  # trigger unequip effect
+    def unequip(self, slots):
+        for slot in slots:
+            if self.slots[slot]:
+                self.slots[slot].unequip(self)
 
     def get_slot_object(self, slot):
         for slot_, item in self.slots.items():
@@ -299,6 +293,11 @@ class Player(Entity):
 
     def enter(self, location):
         return location.on_entry(self)
+
+    def use_item(self, item, victim=None):
+        if not victim and item.self_use:
+            self.use_item(item, self)
+        return self.inventory.use_item(item, victim)
 
 
 class Monster(Entity):

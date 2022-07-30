@@ -21,23 +21,31 @@ class Item:
     stackable = True
     self_use = True
     usable = True
+    equipable_slot = False
     cost = {}
+    number_of_uses = 1
 
     def __str__(self):
         return self.name
 
-    def use(self, **args):
-        return False
+    def use(self, victim):
+        if not self.usable:
+            return False
+        return True
 
-    def equip(self, **args):
-        if "slot" in self.__dict__.keys():
-            return None
-        return False
+    # task: enable equip to remove multiple slot items
+    def equip(self, player):
+        for slot in self.equipable_slot:
+            if player.slots[slot]:
+                player.add_item(player.slots[slot])
+                player.slots[slot] = None
+            player.slots[slot] = self
 
-    def unequip(self, **args):
-        if "slot" in self.__dict__.keys():
-            return None
-        return False
+    def unequip(self, player):
+        for slot, item in player.slots.items():
+            if item and item.name == self.name:
+                player.slots[slot] = None
+                player.add_item(item)
 
 
 class Consumable(Item):
@@ -64,7 +72,8 @@ class Combat(Item):
     stackable = False
     information = None
     self_use = False
-    slot = None
+    equipable_slot = None
+
     cost = 0
     crafting_recipe = None
     rarity = None
@@ -76,6 +85,7 @@ class Stack:
         self.name = item.name
         self.item = item
         self.amount = amount
+        self.number_of_uses = item.number_of_uses
         self.STACK_LIMIT = 32
         self.set_stack_limit()
 

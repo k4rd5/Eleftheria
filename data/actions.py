@@ -18,7 +18,7 @@ class Punch(Action):
     requirements = {'stamina': 10}
     cost = {'stamina': 10}
     type_ = ['melee', 'attack']
-    status_effects = []
+    status_effects = [effects['Poison']]
     damage = 10
 
     def use(self, victim):

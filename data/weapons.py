@@ -8,36 +8,32 @@ archive = {}
 class SteelSword(Combat):
     def __init__(self):
         self.name = "Steel Sword"
-        self.slot = ["forehand"]
+        self.equipable_slot = ["forehand"]
         self.type = "atk"
         self.rarity = Rarity.COMMON
         self.damage = 15
+        self.number_of_uses = 20
 
 
 @add_to(archive)
 class GreatSword(Combat):
     def __init__(self):
         self.name = "Great Sword"
-        self.slot = ["forehand", "offhand"]
+        self.equipable_slot = ["forehand", "offhand"]
         self.type = "atk"
         self.rarity = Rarity.EPIC
         self.damage = 65
-
-    def equip(self, player):
-        player.status_effects.append("RAGE")
-
-    def unequip(self, player):
-        player.status_effects.remove("RAGE")
+        self.number_of_uses = 30
 
 
 @add_to(archive)
 class Vantablack(Combat):
     def __init__(self):
         self.name = "Vantablack"
-        self.slot = None
         self.type = None
         self.rarity = Rarity.MYTHICAL
         self.damage = 9000
         self.information = (
             "The original blade around which the crypts of Nethercastle were built."
         )
+        self.number_of_uses = 2000
